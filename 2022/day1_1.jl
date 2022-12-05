@@ -23,7 +23,7 @@ df = DataFrame(CSV.File(filename, header=false, ignoreemptyrows=false))
 
 
 ##############################
-# Extract solution
+# Extract solution 1
 ##############################
 
 df_mat = Matrix(df)
@@ -50,4 +50,11 @@ mat_cal_tot_sum =  map(x -> sum(x), mat_cal_tot)
 
 # Reduce
 println("Solution: ", maximum(mat_cal_tot_sum))
+
+
+##############################
+# Extract solution 2
+##############################
+
+println("Solution: ", sum(partialsort(mat_cal_tot_sum, 1:3, rev=true)))
 
