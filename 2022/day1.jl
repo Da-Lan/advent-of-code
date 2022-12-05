@@ -8,7 +8,7 @@ using CSV
 # Load data
 ##############################
 
-session_cookie = read("session_cookie.txt", String)
+session_cookie = read(string(@__DIR__, "\\", "session_cookie.txt"), String)
 
 # Credits to https://www.incidentalfindings.org/posts/2022-01-24_learning-julia-with-adventofcode/
 # for this download code !
@@ -18,8 +18,7 @@ filename = "day1.csv"
 data_file = joinpath(@__DIR__, filename)
 println("Day 1: $data_file")
 download(url, data_file, headers = Dict("cookie" => "session=$(session_cookie)"))
-
-df = DataFrame(CSV.File(filename, header=false, ignoreemptyrows=false))
+df = DataFrame(CSV.File(data_file, header=false, ignoreemptyrows=false))
 
 
 ##############################
@@ -28,8 +27,8 @@ df = DataFrame(CSV.File(filename, header=false, ignoreemptyrows=false))
 
 df_mat = Matrix(df)
 
-mat_cal_tot = []
-mat_cal = []
+global mat_cal_tot = []
+global mat_cal = []
 
 # Builds a Vector of Vectors for each elf
 # Each elf Vector can be identified thanks to a missing to break the loop
@@ -37,11 +36,11 @@ for e in df_mat
     println(e)
     if isequal(e, missing)
         println("its a missing")
-        mat_cal_tot = [mat_cal_tot; [mat_cal]]
-        mat_cal = []
+        global mat_cal_tot = [mat_cal_tot; [mat_cal]]
+        global mat_cal = []
     else
         println("its a calorie")
-        mat_cal = [mat_cal; e]
+        global mat_cal = [mat_cal; e]
     end
 end
 
