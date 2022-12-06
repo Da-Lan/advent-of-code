@@ -61,7 +61,7 @@ df = DataFrame(CSV.File(data_file, header=false, ignoreemptyrows=false))
 # Extract solution 1
 ##############################
 
-df = transform(df, "Column2" => ByRow(f) => "my_points").
+df = transform(df, "Column2" => ByRow(f) => "my_points")
 df = transform(df, ["Column1", "Column2"] => ByRow(g) => "match_points")
 df = transform(df, ["my_points", "match_points"] => (+) => "tot_points")
 
