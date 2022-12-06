@@ -40,6 +40,61 @@ function g(x, y)
 end
 
 
+function h(x)
+    if isequal(x, "X")
+        0
+    elseif isequal(x, "Y")
+        3
+    elseif isequal(x, "Z")
+        6
+    else
+        println("Carefull !!! it's an unknown symbol")
+        0
+    end
+end
+
+
+function k(x, y)
+    # if I need to win
+    if isequal(y, 6)
+        if isequal(x, "A")
+            2 # I do paper
+        elseif isequal(x, "B")
+            3 # I do scisors
+        elseif isequal(x, "C")
+            1 # I do rock
+        else
+            println("Carefull !!! it's an unknown symbol")
+            0
+        end
+    # if I need a Draw
+    elseif isequal(y, 3)
+        if isequal(x, "A")
+            1 # I do rock
+        elseif isequal(x, "B")
+            2 # I do paper
+        elseif isequal(x, "C")
+            3 # I do scisors
+        else
+            println("Carefull !!! it's an unknown symbol")
+            0
+        end
+    # if I need to lose
+    elseif isequal(y, 0)
+        if isequal(x, "A")
+            3 # I do scisors
+        elseif isequal(x, "B")
+            1 # I do rock
+        elseif isequal(x, "C")
+            2 # I do paper
+        else
+            println("Carefull !!! it's an unknown symbol")
+            0
+        end
+    end
+end
+
+
 ##############################
 # Load data
 ##############################
@@ -66,4 +121,15 @@ df = transform(df, ["Column1", "Column2"] => ByRow(g) => "match_points")
 df = transform(df, ["my_points", "match_points"] => (+) => "tot_points")
 
 println("Solution: ", sum(df[!, "tot_points"]))
+
+
+##############################
+# Extract solution 2
+##############################
+
+df = transform(df, "Column2" => ByRow(h) => "match_points2")
+df = transform(df, ["Column1", "match_points2"] => ByRow(k) => "my_points2")
+df = transform(df, ["my_points2", "match_points2"] => (+) => "tot_points2")
+
+println("Solution: ", sum(df[!, "tot_points2"]))
 
