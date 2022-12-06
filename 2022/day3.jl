@@ -5,6 +5,21 @@ using CSV
 
 
 ##############################
+# Functions
+##############################
+
+function f(x)
+    x1 = x[1]
+
+    if islowercase(x1)
+        parse(Int, x1, base=62) - 35
+    elseif isuppercase(x1)
+        parse(Int, x1, base=62) - 9 + 26
+    end
+end
+
+
+##############################
 # Load data
 ##############################
 
@@ -25,12 +40,7 @@ df = DataFrame(CSV.File(data_file, header=false, ignoreemptyrows=false))
 # Extract solution 1
 ##############################
 
-priorities = map(x -> (x1 = x[1];
-                        if islowercase(x1)
-                            parse(Int, x1, base=62) - 35
-                        elseif isuppercase(x1)
-                            parse(Int, x1, base=62) - 9 + 26
-                        end),
+priorities = map(x -> f(x),
                     map(x -> intersect(x[1], x[2]),
                         map(x -> [x[1:Int(floor(length(x)/2))],
                                 x[Int(floor(length(x)/2))+1:length(x)]],
@@ -38,5 +48,4 @@ priorities = map(x -> (x1 = x[1];
                     )
                 )
 
-                
 println("Solution: ", sum(priorities))
