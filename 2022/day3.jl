@@ -43,8 +43,9 @@ df = DataFrame(CSV.File(data_file, header=false, ignoreemptyrows=false))
 priorities = map(x -> f(x),
                     map(x -> intersect(x[1], x[2]),
                         map(x -> [x[1:Int(floor(length(x)/2))],
-                                x[Int(floor(length(x)/2))+1:length(x)]],
-                        df[!, "Column1"])
+                                 x[Int(floor(length(x)/2))+1:length(x)]],
+                            df[!, "Column1"]
+                        )
                     )
                 )
 
