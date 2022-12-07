@@ -57,15 +57,12 @@ println("Solution: ", sum(priorities))
 ##############################
 
 step = 3
-
 priorities2 = map(x -> f(x),
                     map(x -> intersect(x[1], x[2], x[3]),
-                            map(x -> (x1 = Int(floor(x)); df[!, "Column1"][x1:x1+step-1]),
-                                range(1, length(df[!, "Column1"])-step+1, step=step)
-                            )
+                        map(x -> (x1 = Int(floor(x)); df[!, "Column1"][x1:x1+step-1]),
+                            range(1, length(df[!, "Column1"])-step+1, step=step)
                         )
-                )
-                        
+                    )
+                )        
                 
-
 println("Solution: ", sum(priorities2))
