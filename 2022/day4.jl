@@ -65,7 +65,7 @@ println("Solution: ", size(filter( x -> isequal(x, 1), df[!, "is_overlap"]))[1])
 
 
 ##############################
-# Extract solution 1
+# Extract solution 2
 ##############################
 
 df = transform(df, ["Column1", "Column2"] => ByRow(g) => "nb_intersections")
