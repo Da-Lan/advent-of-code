@@ -24,6 +24,20 @@ function f(x, y)::Int
 
 end
 
+
+function g(x, y)::Int
+    range_dict = Dict()
+
+    x_split = map(e -> parse(Int, e), split(x, "-"))
+    x_range = range(x_split[1], x_split[2])
+
+    y_split = map(e -> parse(Int, e), split(y, "-"))
+    y_range = range(y_split[1], y_split[2])
+
+    size(intersect(x_range, y_range))[1]
+end
+
+
 ##############################
 # Load data
 ##############################
@@ -41,9 +55,6 @@ download(url, data_file, headers = Dict("cookie" => "session=$(session_cookie)")
 df = DataFrame(CSV.File(data_file, header=false, ignoreemptyrows=false))
 
 
-df = transform(df, ["Column1", "Column2"] => ByRow(f) => "is_overlap")
-
-
 ##############################
 # Extract solution 1
 ##############################
@@ -51,3 +62,12 @@ df = transform(df, ["Column1", "Column2"] => ByRow(f) => "is_overlap")
 df = transform(df, ["Column1", "Column2"] => ByRow(f) => "is_overlap")
 
 println("Solution: ", size(filter( x -> isequal(x, 1), df[!, "is_overlap"]))[1])
+
+
+##############################
+# Extract solution 1
+##############################
+
+df = transform(df, ["Column1", "Column2"] => ByRow(g) => "nb_intersections")
+
+println("Solution: ", size(filter( x -> !isequal(x, 0), df[!, "nb_intersections"]))[1])
