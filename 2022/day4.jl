@@ -26,7 +26,6 @@ end
 
 
 function g(x, y)::Int
-    range_dict = Dict()
 
     x_split = map(e -> parse(Int, e), split(x, "-"))
     x_range = range(x_split[1], x_split[2])
