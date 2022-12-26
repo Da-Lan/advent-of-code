@@ -2,6 +2,7 @@ using Downloads: download
 using DelimitedFiles
 using DataFrames
 using CSV
+using SplitApplyCombine
 
 
 ##############################
@@ -65,6 +66,67 @@ function g(crates_local, nb_move, from, to)
 end
 
 
+function h(crates_local, nb_move, from, to)
+    """
+    Takes the number of movents to be done, the col number of the crate to be moved,
+    the col number of the destination
+    Returns the Matrix crates modified
+    """
+
+    from_i = 0
+    to_i = 0
+
+    println("---------- Begin move of ", nb_move, from, to)
+
+    # get "from" upper letter's index
+    cr = crates_local[from]
+    for i in range(1, length(cr))
+        if isequal(cr[i], " ")
+            break
+        else
+            from_i = (i, cr[i])
+        end
+    end
+
+    # get "to" upper letter's top index
+    cr = crates_local[to]
+    for i in range(1, length(cr))
+        if isequal(cr[i], " ")
+            to_i = (i, cr[i])
+            break
+        end
+    end
+
+    # place "from" letter * nb_moves in place of "to"
+    for i in range(1, nb_move)
+        crates_local[to][to_i[1]+i-1] = crates_local[from][from_i[1]-nb_move+i]
+        crates_local[from][from_i[1]-nb_move+i] = " "
+    end
+
+    crates_local
+end
+
+
+function get_upper_letters(crates_local)
+    up_letter = []
+
+    for cr in crates_local
+        local_up_letter = " "
+        for i in range(1, length(cr))
+            if isequal(cr[i], " ")
+                break
+            else
+                local_up_letter = cr[i]
+            end
+        end
+        push!(up_letter, local_up_letter)
+    end
+
+    up_letter
+end
+
+
+
 ##############################
 # Load data
 ##############################
@@ -107,7 +169,6 @@ crates = map(e -> e[2:4:length(e)], crates)
 crates = map(e -> map(e -> String(e::SubString), split(e, "")),
                     crates)
 
-
 # reformat procedure
 procedure = DataFrame(sentence=procedure)
 procedure = transform(procedure, "sentence" => ByRow(f) => ["nb_move", "from", "to"])
@@ -120,31 +181,39 @@ ini_vec = [fill(" ", size(crates[1])[1])]
 crates = vcat(crates, repeat(ini_vec, outer = 50))
 
 # Transpose
-using SplitApplyCombine
 crates = invert(crates)
+
+crates1 = deepcopy(crates)
+crates2 = crates
 
 # move crates according to precedure
 for r in eachrow(procedure)
-    global crates = g(crates, r[2], r[3], r[4])
+    global crates1 = g(crates1, r[2], r[3], r[4])
 end
 
 # get upper letter of each column
-up_letter = []
+println("Solution: ", join(get_upper_letters(crates1), ""))
 
-for cr in crates
-    local_up_letter = " "
-    for i in range(1, length(cr))
-        if isequal(cr[i], " ")
-            break
-        else
-            local_up_letter = cr[i]
-        end
-    end
-    push!(up_letter, local_up_letter)
-end
-
-println("Solution: ", join(up_letter, ""))
 
 ##############################
 # Extract solution 2
 ##############################
+
+print(crates2)
+# move crates according to precedure
+for r in eachrow(procedure)
+    global crates2 = h(crates2, r[2], r[3], r[4])
+end
+
+# get upper letter of each column
+println("Solution: ", join(get_upper_letters(crates2), ""))
+
+
+
+
+
+
+
+
+
+
