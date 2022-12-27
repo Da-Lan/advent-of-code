@@ -56,3 +56,5 @@ println("Solution: ", f(stream, 4))
 ##############################
 # Extract solution 2
 ##############################
+
+println("Solution: ", f(stream, 14))
