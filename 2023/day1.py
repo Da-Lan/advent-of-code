@@ -5,6 +5,31 @@ import pandas as pd
 import re
 from pathlib import Path
 
+
+##############################
+# Functions
+##############################
+
+def f(s):
+    for key in NUM_DICT.keys():
+        s = s.replace(key, NUM_DICT[key])
+    return s
+
+
+##############################
+# Global variables
+##############################
+
+NUM_DICT = {"one": "1",
+            "two": "2",
+            "three": "3",
+            "four": "4",
+            "five": "5",
+            "six": "6",
+            "seven": "7",
+            "eight": "8",
+            "nine": "9"}
+
 ##############################
 # Load data
 ##############################
@@ -42,4 +67,19 @@ df["col"] = df["col"].apply(lambda x: re.findall("[0-9]", x)[0] \
                                       + re.findall("[0-9]", x)[-1])
 df["col"] = df["col"].astype(int)
 
-print("Solution :", df["col"].sum())
+print("Solution 1 :", df["col"].sum())
+
+##############################
+# Extract solution 2
+##############################
+
+df = pd.read_csv(filepath, header=None)
+df = df.rename(columns={0: "col"})
+
+df["col"] = df["col"].apply(f)
+
+df["col"] = df["col"].apply(lambda x: re.findall("[0-9]", x)[0] \
+                                      + re.findall("[0-9]", x)[-1])
+df["col"] = df["col"].astype(int)
+
+print("Solution 2 :", df["col"].sum())
