@@ -11,9 +11,21 @@ from pathlib import Path
 ##############################
 
 def f(s):
-    for key in NUM_DICT.keys():
-        s = s.replace(key, NUM_DICT[key])
-    return s
+    s_sub = ""
+    for c in s:
+        s_sub = s_sub + c
+        for key in NUM_DICT.keys():
+            s_sub = s_sub.replace(key, NUM_DICT[key])
+    return s_sub
+
+
+def f_reverse(s):
+    s_sub = ""
+    for c in reversed(s):
+        s_sub = c + s_sub
+        for key in NUM_DICT.keys():
+            s_sub = s_sub.replace(key, NUM_DICT[key])
+    return s_sub
 
 
 ##############################
@@ -76,10 +88,11 @@ print("Solution 1 :", df["col"].sum())
 df = pd.read_csv(filepath, header=None)
 df = df.rename(columns={0: "col"})
 
-df["col"] = df["col"].apply(f)
+df["col2"] = df["col"].apply(f)
+df["col2_reverse"] = df["col"].apply(f_reverse)
 
-df["col"] = df["col"].apply(lambda x: re.findall("[0-9]", x)[0] \
-                                      + re.findall("[0-9]", x)[-1])
-df["col"] = df["col"].astype(int)
+df["col2_concat"] = df[["col2", "col2_reverse"]].apply(lambda x: re.findall("[0-9]", x[0])[0] \
+                                                                 + re.findall("[0-9]", x[1])[-1], 1)
+df["col2_concat"] = df["col2_concat"].astype(int)
 
-print("Solution 2 :", df["col"].sum())
+print("Solution 2 :", df["col2_concat"].sum())
